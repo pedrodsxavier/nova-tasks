@@ -12,19 +12,28 @@ function renderTasks() {
 
     tasks.forEach((task, index) => {
         const li = document.createElement('li');
-        li.textContent = task.text;
+
+        const span = document.createElement('span');
+        span.textContent = task.text;
+
+        if (task.done) {
+            span.style.textDecoration = 'line-through';
+        }
+
+        span.onclick = () => toogleTask(index);
 
         const btn = document.createElement('button');
         btn.textContent = 'X';
         btn.onclick = () => removeTask(index);
 
+        li.appendChild(span);
         li.appendChild(btn);
         taskList.appendChild(li);
     });
 }
 
 function addTask() {
-    const tkValue = taskInput.value;
+    const tkValue = taskInput.value.trim();
 
     if (!tkValue) return;
 
@@ -33,13 +42,16 @@ function addTask() {
         done: false
     });
 
+    taskInput.value = '';
+
     saveTasks();
     renderTasks();
 }
 
 function removeTask(index) {
     tasks.splice(index, 1);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    
+    saveTasks();
     renderTasks();
 }
 
