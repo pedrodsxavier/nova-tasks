@@ -15,6 +15,7 @@ form.addEventListener('submit', function(event) {
     if (username === fakeUser.username && password === fakeUser.password) {
         // login successfully
         localStorage.setItem('user', JSON.stringify({ username }));
+        localStorage.setItem('logged', 'true');
 
         if (remember) {
             localStorage.setItem('remember', 'true');
