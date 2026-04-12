@@ -1,10 +1,14 @@
+Auth.requireAuth();
+
 const taskInput = document.getElementById('taskInput')
 const taskList = document.getElementById('taskList')
 
-let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const storageKey = `tasks_${Auth.get().username}`;
+
+let tasks = JSON.parse(localStorage.getItem(storageKey)) || [];
 
 function saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem(storageKey, JSON.stringify(tasks));
 }
 
 function renderTasks() {
@@ -20,14 +24,14 @@ function renderTasks() {
             span.style.textDecoration = 'line-through';
         }
 
-        span.onclick = () => toogleTask(index);
+        span.onclick = () => toggleTask(index);
 
-        const btn = document.createElement('button');
-        btn.textContent = 'X';
-        btn.onclick = () => removeTask(index);
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'X';
+        deleteBtn.onclick = () => removeTask(index);
 
         li.appendChild(span);
-        li.appendChild(btn);
+        li.appendChild(deleteBtn);
         taskList.appendChild(li);
     });
 }
@@ -55,7 +59,7 @@ function removeTask(index) {
     renderTasks();
 }
 
-function toogleTask(index) {
+function toggleTask(index) {
     tasks[index].done = !tasks[index].done;
 
     saveTasks();
